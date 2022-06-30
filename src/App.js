@@ -25,24 +25,46 @@ const initialPuzzle = [
 //   [0,0,0,0,0,0,0,0,0],
 // ]
 
+const customPuzzle = [
+  [0,0,0,0,0,0,0,0,0],
+  [0,0,0,0,0,0,0,0,0],
+  [0,0,0,0,0,0,0,0,0],
+  [0,0,0,0,0,0,0,0,0],
+  [0,0,0,0,0,0,0,0,0],
+  [0,0,0,0,0,0,0,0,0],
+  [0,0,0,0,0,0,0,0,0],
+  [0,0,0,0,0,0,0,0,0],
+  [0,0,0,0,0,0,0,0,0],
+]
+
 function App() {
   const [sudokuArr, setSudokuArr] = useState()
   const [data, setData] = useState(false)
+  const [puzzleUploadPlay, setPuzzleUploadPlay] = useState(null)
   const [puzzleUpload, setPuzzleUpload] = useState(null)
 
+  const [myOwnBoard, setMyOwnBoard] = useState([])
+
   console.log("cek dataArr", sudokuArr);
-  console.log("cek data", puzzleUpload);
+  console.log("cek data", puzzleUploadPlay);
   console.log("cek tipe data dataArr",typeof sudokuArr);
-  console.log("cek tipe data data",typeof puzzleUpload);
+  console.log("cek tipe data data",typeof puzzleUploadPlay);
 
   useEffect(() => {
-    if(puzzleUpload !== null) {
-      setSudokuArr(puzzleUpload)
+    if(puzzleUploadPlay !== null) {
+      setSudokuArr(puzzleUploadPlay)
       setData(true)
     }
-  }, [puzzleUpload])
+  }, [puzzleUploadPlay])
 
-  function clear() {
+  // useEffect(() => {
+  //   if(myOwnBoard !== 0) {
+  //     setSudokuArr(myOwnBoard)
+  //     setData(true)
+  //   }
+  // }, [myOwnBoard])
+
+  function clearBoard() {
     setSudokuArr([])
     setData(false)
   }
@@ -52,9 +74,33 @@ function App() {
     setData(true)
   }
 
+  function jsonFunction(e) {
+    return JSON.parse(JSON.stringify(e))
+  }
+
+  function resetGame() {
+    if(puzzleUpload !== null) {
+      let sudoku = jsonFunction(puzzleUpload)
+      return setSudokuArr(sudoku)
+    } else {
+      let sudoku = jsonFunction(initialPuzzle)
+      return setSudokuArr(sudoku)
+    }
+  }
+
+  function ownBoard() {
+    setSudokuArr(customPuzzle)
+    setData(true)
+  }
+
+  // function playOwnBoard() {
+  //   setMyOwnBoard(sudokuArr)
+  //   setData(true)
+  // }
+
   function onInputChange(e, row, col) {
     let val   = parseInt(e.target.value) || 0
-    let grid  = JSON.parse(JSON.stringify(sudokuArr))
+    let grid  = jsonFunction(sudokuArr)
     
     if(val === 0 || val >=1 && val <= 9) {
       grid[row][col] = val
@@ -78,6 +124,7 @@ function App() {
       }
 
       setPuzzleUpload(result)
+      setPuzzleUploadPlay(result)
     }
     reader.onerror = () =>{
       console.log("file error", reader.error);
@@ -108,7 +155,7 @@ function App() {
                               value={sudokuArr[row][col] === 0 ? '' : sudokuArr[row][col]} 
                               className="input-cell"
                               onChange={e => onInputChange(e, row, col)}
-                              disabled={sudokuArr ? sudokuArr[row][col] !== 0 : setPuzzleUpload[row][col] !== 0}
+                              disabled={sudokuArr ? sudokuArr[row][col] !== 0 : setPuzzleUploadPlay[row][col] !== 0}
                             />
                             : 
                               <input  
@@ -129,13 +176,15 @@ function App() {
           </tbody>
         </table>
         <div className="button-container">
-            <button className="game-button" onClick={clear}>Clear</button>
+            <button className="game-button" onClick={clearBoard}>Clear</button>
             <button className="game-button" onClick={playGame}>Play</button>
+            <button className="game-button" onClick={resetGame}>Reset</button>
+            <input type="file" onChange={(e) => handleFileChange(e)} />
+            <button className="game-button" onClick={ownBoard}>Make Own Board</button>
         </div>
         <div className="input-file-container">
-            <input type="file" onChange={(e) => handleFileChange(e)} />
             <br />
-            <h4>{puzzleUpload}</h4>
+            <h4>{puzzleUploadPlay}</h4>
         </div>
       </div>
     </div>
