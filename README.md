@@ -1,5 +1,16 @@
 ## Requirement :
 - node (v16.13.2)
+- npm (v8.1.2)
+
+## Features :
+- Load a new sudoku board form a text file
+- Reset the board to the latest oaded sudoku board
+- Clear the board completely
+- Make a custom board and save it
+- it should not be allowed to update coordinates that are fixed
+- you can design your own version and format of the input file
+
+# ________________________________________________
 
 # Getting Started with Create React App
 
