@@ -46,7 +46,7 @@ function App() {
   const [myOwnBoard, setMyOwnBoard] = useState([])
 
   console.log("cek dataArr", sudokuArr);
-  console.log("cek data", puzzleUploadPlay);
+  console.log("cek data", myOwnBoard);
   console.log("cek tipe data dataArr",typeof sudokuArr);
   console.log("cek tipe data data",typeof puzzleUploadPlay);
 
@@ -79,24 +79,29 @@ function App() {
   }
 
   function resetGame() {
+    let sudoku
+
     if(puzzleUpload !== null) {
-      let sudoku = jsonFunction(puzzleUpload)
-      return setSudokuArr(sudoku)
+      sudoku = jsonFunction(puzzleUpload)
+    } else if(myOwnBoard.length !== 0) {
+      sudoku = jsonFunction(myOwnBoard)
+      setMyOwnBoard([])
     } else {
-      let sudoku = jsonFunction(initialPuzzle)
-      return setSudokuArr(sudoku)
+      sudoku = jsonFunction(initialPuzzle)
     }
+
+    setSudokuArr(sudoku)
   }
 
   function ownBoard() {
     setSudokuArr(customPuzzle)
+    setMyOwnBoard(customPuzzle)
     setData(true)
   }
 
-  // function playOwnBoard() {
-  //   setMyOwnBoard(sudokuArr)
-  //   setData(true)
-  // }
+  function playOwnBoard() {
+    setMyOwnBoard(sudokuArr)
+  }
 
   function onInputChange(e, row, col) {
     let val   = parseInt(e.target.value) || 0
@@ -112,11 +117,11 @@ function App() {
   function handleFileChange(e) {
     const file = e.target.files[0]
     const reader = new FileReader()
+    const result  = []
 
     reader.readAsText(file)
     reader.onload = () => {
       const data    = reader.result.split(/[\r\n]+/)
-      const result  = []
 
       for(let v of data) {
         // console.log(JSON.parse(v));
@@ -180,7 +185,11 @@ function App() {
             <button className="game-button" onClick={playGame}>Play</button>
             <button className="game-button" onClick={resetGame}>Reset</button>
             <input type="file" onChange={(e) => handleFileChange(e)} />
-            <button className="game-button" onClick={ownBoard}>Make Own Board</button>
+            {myOwnBoard === customPuzzle ? 
+              <button className="game-button" onClick={playOwnBoard}>Play Own Board</button>
+              :
+              <button className="game-button" onClick={ownBoard}>Make Own Board</button>
+            }
         </div>
         <div className="input-file-container">
             <br />
