@@ -10,8 +10,6 @@
 - it should not be allowed to update coordinates that are fixed
 - you can design your own version and format of the input file
 
-# ________________________________________________
-
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
