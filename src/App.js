@@ -14,15 +14,15 @@ import './App.css';
 // ]
 
 function App() {
-  const [sudokuArr, setSudokuArr] = useState([])
+  const [sudokuPuzzle, setSudokuPuzzle] = useState([])
   const [puzzleUpload, setPuzzleUpload] = useState(null)
   const [myOwnBoard, setMyOwnBoard] = useState(null)
   const [buildOwnBoard, setBuildOwnBoard] = useState(true)
   
   const board = [0,1,2,3,4,5,6,7,8]
   
-  // console.log("cek dataArr", sudokuArr);
-  // console.log("cek tipe data dataArr",typeof sudokuArr);
+  // console.log("cek dataArr", puzzleUpload);
+  // console.log("cek tipe data dataArr",typeof sudokuPuzzle);
 
   const customPuzzle = [
     [0,0,0,0,0,0,0,0,0],
@@ -49,7 +49,7 @@ function App() {
   ]
 
   function clearBoard() {
-    setSudokuArr([])
+    setSudokuPuzzle([])
   }
 
   function playGame() {
@@ -61,11 +61,13 @@ function App() {
       setMyOwnBoard(null)
     }
 
-    setSudokuArr(puzzle)
+    setSudokuPuzzle(puzzle)
   }
 
   function resetGame() {
     let sudoku
+
+    console.log(sudoku);
 
     if(puzzleUpload !== null) {
       sudoku = puzzleUpload
@@ -75,29 +77,31 @@ function App() {
       sudoku = puzzle
     }
 
-    setSudokuArr(sudoku)
+    console.log(sudoku);
+
+    setSudokuPuzzle(sudoku)
   }
 
   function ownBoard() {
-    setSudokuArr(customPuzzle)
-    setMyOwnBoard(customPuzzle)
+    setSudokuPuzzle(customPuzzle)
     setBuildOwnBoard(false)
   }
 
   function playOwnBoard() {
-    setMyOwnBoard(sudokuArr)
+    setMyOwnBoard(sudokuPuzzle)
+    setPuzzleUpload(null)
     setBuildOwnBoard(true)
   }
 
-  function onInputChange(e, row, col) {
+  function handleChange(e, row, col) {
     let val   = parseInt(e.target.value) || 0
-    let grid  = JSON.parse(JSON.stringify(sudokuArr))
-    
+    let grid  = JSON.parse(JSON.stringify(sudokuPuzzle))
+
     if(val === 0 || (val >=1 && val <= 9)) {
       grid[row][col] = val
     }
 
-    setSudokuArr(grid)
+    setSudokuPuzzle(grid)
   }
 
   function handleFileChange(e) {
@@ -115,7 +119,7 @@ function App() {
       }
 
       setPuzzleUpload(result)
-      setSudokuArr(result)
+      setSudokuPuzzle(result)
     }
     reader.onerror = () =>{
       console.error("file error", reader.error);
@@ -139,18 +143,17 @@ function App() {
                       board.map((col, colIndex) => {
                         return(
                           <td key={rowIndex + colIndex} className={(col + 1) %3 === 0 ? "board-border-right" : ""}>
-                            {sudokuArr.length !== 0 ? 
+                            {sudokuPuzzle.length !== 0 ? 
                               <input 
-                              value={sudokuArr[row][col] === 0 ? "" : sudokuArr[row][col]} 
+                              value={sudokuPuzzle[row][col] === 0 ? "" : sudokuPuzzle[row][col]} 
                               className="input-cell"
-                              onChange={e => onInputChange(e, row, col)}
-                              disabled={sudokuArr ? sudokuArr[row][col] !== 0 : setPuzzleUpload[row][col] !== 0}
+                              onChange={e => handleChange(e, row, col)}
+                              disabled={sudokuPuzzle[row][col] !== 0}
                             />
                             : 
                               <input  
                                 className="input-cell"
                                 value={""}
-                                onChange={e => onInputChange(e, row, col)}
                                 disabled
                               />
                             }
