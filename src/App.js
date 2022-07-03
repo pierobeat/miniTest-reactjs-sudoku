@@ -21,7 +21,8 @@ function App() {
   
   const board = [0,1,2,3,4,5,6,7,8]
   
-  // console.log("cek dataArr", puzzleUpload);
+  // console.log("cek puzzleUpload", puzzleUpload);
+  // console.log("cek myOwnBoard", myOwnBoard);
   // console.log("cek tipe data dataArr",typeof sudokuPuzzle);
 
   const customPuzzle = [
@@ -53,14 +54,8 @@ function App() {
   }
 
   function playGame() {
-    if(puzzleUpload !== null) {
-      setPuzzleUpload(null)
-    }
-
-    if(myOwnBoard !== null) {
-      setMyOwnBoard(null)
-    }
-
+    setPuzzleUpload(null)
+    setMyOwnBoard(null)
     setSudokuPuzzle(puzzle)
   }
 
